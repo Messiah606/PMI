@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fff8e8">
+    <title>Kuis Sejarah: Peristiwa Rengasdengklok</title>
+    <link rel="stylesheet" href="styles.css?v=podium-score-fix-1">
+</head>
+<body class="welcome-pending">
+    <div class="app-shell">
+        <div class="welcome-splash" id="welcomeSplash" aria-hidden="true">
+            <img src="assets/aset%20pendukung/selamat_datang_ProQ.png" alt="">
+        </div>
+        <button class="settings-button" id="settingsButton" type="button" aria-label="Buka pengaturan" aria-haspopup="dialog" aria-expanded="false" hidden>
+            <img src="assets/ui/settings.png" alt="">
+            <span>Setting</span>
+        </button>
+        <button class="profile-button" id="profileButton" type="button" aria-label="Buka profil pengembang" hidden>
+            <img src="assets/ui/developers.png" alt="">
+            <span>Profil<br>Pengembang</span>
+        </button>
+        <main>
+        <section class="screen active" id="screen-start" aria-labelledby="start-title">
+            <div class="start-panel">
+                <div class="start-mascots" aria-hidden="true">
+                    <img class="start-character start-character-girl" src="assets/aset%20pendukung/karakter_cewe.png" alt="">
+                    <img class="start-character start-character-boy" src="assets/aset%20pendukung/karakter_cowo.png" alt="">
+                </div>
+                <h1 id="start-title" class="start-title-image"><img src="assets/aset%20pendukung/judul.png" alt="Petualangan Sejarah Indonesia"></h1>
+                <button class="button button-primary start-button" id="startButton" type="button">START</button>
+                <p class="intro">Masuki petualangan sejarah Indonesia dan uji pengetahuanmu.</p>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-player" aria-labelledby="player-title">
+            <div class="quiz-card player-card">
+                <form class="player-form" id="playerForm">
+                    <div class="player-name-art">
+                        <h1 id="player-title" class="player-title-image"><img src="assets/aset%20pendukung/input_nama.png" alt="Input nama Anda"></h1>
+                        <label class="player-label visually-hidden" for="playerName">Nama pemain</label>
+                        <input class="player-input player-input-art" id="playerName" name="playerName" type="text" maxlength="30" autocomplete="off" placeholder="Nama kamu" required>
+                    </div>
+                    <button class="button button-primary start-button" type="submit">LANJUT</button>
+                </form>
+                <button class="text-button back-asset-button" id="backToStartButton" type="button" aria-label="Kembali"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-home" aria-labelledby="home-title">
+            <div class="home-menu">
+                <h1 class="home-title" id="home-title">Tampilan Utama</h1>
+                <div class="home-visual">
+                    <img src="assets/aset%20pendukung/judul.png" alt="Petualangan Sejarah Indonesia">
+                </div>
+                <div class="home-menu-grid">
+                    <button class="image-menu-button home-start-button" id="startGameButton" type="button" aria-label="Mulai Penjelajahan">
+                        <img src="assets/aset%20pendukung/Tombol_Mulai_Game.png" alt="">
+                        <span>Mulai Penjelajahan</span>
+                    </button>
+                    <button class="image-menu-button home-material-button" id="openMaterialButton" type="button" aria-label="Materi Umum">
+                        <img src="assets/aset%20pendukung/MATERI.png" alt="">
+                        <span>Materi Umum</span>
+                    </button>
+                    <button class="image-menu-button home-learning-button" id="openObjectivesButton" type="button" aria-label="Capaian Pembelajaran">
+                        <img src="assets/aset%20pendukung/Capaian_Pembelajaran.png" alt="">
+                        <span>Capaian Pembelajaran</span>
+                    </button>
+                    <button class="image-menu-button home-learning-button" id="openLearningGoalsButton" type="button" aria-label="Tujuan Pembelajaran">
+                        <img src="assets/aset%20pendukung/Tujuan_Pembelajaran.png" alt="">
+                        <span>Tujuan Pembelajaran</span>
+                    </button>
+                </div>
+                <button class="text-button leaderboard-home-link" id="openLeaderboardButton" type="button">Lihat leaderboard</button>
+                <div class="leaderboard-file-controls">
+                    <p class="leaderboard-connection-status" id="leaderboardConnectionStatus" role="status" aria-live="polite">Skor tersimpan di file leaderboard.json dan leaderboard.csv pada folder proyek.</p>
+                </div>
+                <button class="home-back-button back-asset-button" id="backToStartButtonFromHome" type="button" aria-label="Kembali">
+                    <img src="assets/ui/back.png" alt="">
+                </button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-leaderboard" aria-labelledby="leaderboard-page-title">
+            <div class="quiz-card content-card">
+                <p class="eyebrow">Petualangan Sejarah Indonesia</p>
+                <h1 id="leaderboard-page-title">Leaderboard</h1>
+                <p class="material-description">10 skor tertinggi yang tersimpan.</p>
+                <div class="podium" id="pagePodium" aria-label="Podium 3 besar">
+                    <div class="podium-place podium-second">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">🥈</span><strong id="pagePodiumSecondName">—</strong><small id="pagePodiumSecondScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 2">2</div>
+                    </div>
+                    <div class="podium-place podium-first">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">👑</span><strong id="pagePodiumFirstName">—</strong><small id="pagePodiumScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 1">1</div>
+                    </div>
+                    <div class="podium-place podium-third">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">🥉</span><strong id="pagePodiumThirdName">—</strong><small id="pagePodiumThirdScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 3">3</div>
+                    </div>
+                </div>
+                <ol class="leaderboard-list" id="leaderboardPageList" aria-live="polite"></ol>
+                <p class="leaderboard-page-status" id="leaderboardPageStatus" role="status" aria-live="polite">Memuat leaderboard…</p>
+                <button class="button back-button back-asset-button" id="backFromLeaderboardButton" type="button" aria-label="Kembali ke menu utama"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-objectives" aria-labelledby="objectives-title">
+            <div class="learning-image-page">
+                <h1 class="visually-hidden" id="objectives-title">Capaian Pembelajaran</h1>
+                <img src="assets/aset%20pendukung/Isi_Capaian_Pembelajaran.png" alt="Capaian Pembelajaran: peserta didik memahami, merekonstruksi, dan mengevaluasi peristiwa proklamasi kemerdekaan serta penyebaran beritanya.">
+                <button class="button back-button back-asset-button" id="backFromObjectivesButton" type="button" aria-label="Kembali"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-learning-goals" aria-labelledby="learning-goals-title">
+            <div class="learning-image-page">
+                <h1 class="visually-hidden" id="learning-goals-title">Tujuan Pembelajaran</h1>
+                <img src="assets/aset%20pendukung/Isi_Tujuan_Pembelajaran.png" alt="Tujuan pembelajaran tentang Rengasdengklok, perumusan teks Proklamasi, tokoh, pembacaan, dan penyebaran berita Proklamasi.">
+                <button class="button back-button back-asset-button" id="backFromLearningGoalsButton" type="button" aria-label="Kembali"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-material" aria-labelledby="material-title">
+            <div class="quiz-card material-card">
+                <p class="eyebrow">Petualangan Sejarah Indonesia</p>
+                <h1 id="material-title">Materi Umum</h1>
+                <p class="material-description">Pilih salah satu materi untuk membaca rangkumannya.</p>
+                <div class="material-grid">
+                    <button class="material-choice" type="button" data-material-index="0">
+                        <span class="material-number">01</span>
+                        <span><strong>Peristiwa Rengasdengklok</strong><small>Latar belakang dan jalannya peristiwa</small></span>
+                    </button>
+                    <button class="material-choice" type="button" data-material-index="1">
+                        <span class="material-number">02</span>
+                        <span><strong>Proses Perumusan Naskah Proklamasi</strong><small>Tokoh dan proses penyusunan naskah</small></span>
+                    </button>
+                    <button class="material-choice" type="button" data-material-index="2">
+                        <span class="material-number">03</span>
+                        <span><strong>Persiapan Proklamasi Kemerdekaan</strong><small>Persiapan pembacaan kemerdekaan</small></span>
+                    </button>
+                    <button class="material-choice" type="button" data-material-index="3">
+                        <span class="material-number">04</span>
+                        <span><strong>Proklamasi Kemerdekaan dan Penyebaran Berita</strong><small>Pembacaan dan penyebaran berita kemerdekaan</small></span>
+                    </button>
+                </div>
+                <button class="button back-button back-asset-button" id="backFromMaterialButton" type="button" aria-label="Kembali"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-video" aria-labelledby="video-title">
+            <div class="quiz-card video-card">
+                <p class="eyebrow" id="videoEyebrow">Materi 1 dari 3</p>
+                <h1 class="video-heading" id="video-title">Video Materi</h1>
+                <div class="video-frame">
+                    <video class="video-player" id="materialVideo" playsinline preload="metadata"></video>
+                    <div class="video-frame-controls" aria-label="Kontrol video">
+                        <button class="video-control-button" id="videoSeekBackButton" type="button" aria-label="Mundur 10 detik">◀◀</button>
+                        <button class="video-control-button video-play-button" id="videoPlayPauseButton" type="button" aria-label="Putar video">▶</button>
+                        <button class="video-control-button" id="videoSeekForwardButton" type="button" aria-label="Maju 10 detik">▶▶</button>
+                        <input class="video-seek" id="videoSeekBar" type="range" min="0" max="1000" value="0" aria-label="Posisi video">
+                        <button class="video-control-button video-expand-button" id="videoExpandButton" type="button" aria-label="Perbesar video" aria-pressed="false">⛶</button>
+                    </div>
+                    <img class="video-frame-art" src="assets/aset%20pendukung/Frame_Video_Updated.png" alt="" aria-hidden="true">
+                </div>
+                <p class="video-status" id="videoStatus" role="status" aria-live="polite"></p>
+                <div class="video-actions">
+                    <button class="image-action-button video-next-button" id="videoNextButton" type="button" aria-label="Lanjut ke soal materi ini">
+                        <img src="assets/ui/next.png" alt="">
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-tutorial" aria-labelledby="tutorial-title">
+            <div class="quiz-card content-card">
+                <p class="eyebrow">Petualangan Sejarah Indonesia</p>
+                <h1 id="tutorial-title" tabindex="-1">Tutorial Bermain</h1>
+                <ol class="content-list">
+                    <li>
+                        Pada tahap awal, anda diminta untuk mengetikkan nama panjang anda (maksimal dua kata) pada kolom yang disediakan di layar
+                        <img class="tutorial-step-image tutorial-name-image" src="assets/aset%20pendukung/input_nama.png" alt="Contoh kolom untuk memasukkan nama">
+                    </li>
+                    <li>Setelah memasukkan nama, pilih tombol Start Game</li>
+                    <li>
+                        Anda akan disajikan video materi pembelajaran sejarah. Perhatikan materi tersebut dengan baik agar anda dapat menjawab pertanyaan di sesi berikutnya
+                        <img class="tutorial-step-image" src="assets/aset%20pendukung/tombol_start_tutorial.png" alt="Tombol START">
+                    </li>
+                    <li>
+                        Tekan tombol Next setelah anda selesai atau memahami materi yang ditampilkan
+                        <img class="tutorial-step-image tutorial-next-image" src="assets/ui/next.png" alt="Gambar tombol NEXT">
+                    </li>
+                    <li>Anda akan diuji melalui soal-soal berbentuk pilihan ganda serta soal benar/salah</li>
+                    <li>Total ada 17 soal yang harus diselesaikan</li>
+                    <li>Di dalam rangkaian soal tersebut, terdapat 7 soal tantangan berbentuk drag-and-drop (seret dan letakkan)</li>
+                    <li>Selesaikan seluruhnya untuk melihat perolehan skor akhir anda serta posisi anda pada leaderboard</li>
+                </ol>
+                <button class="button back-button back-asset-button" id="backFromTutorialButton" type="button" aria-label="Kembali"><img src="assets/ui/back.png" alt=""></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-developer" aria-labelledby="developer-title">
+            <div class="developer-image-page">
+                <h1 class="visually-hidden" id="developer-title">Profil Pengembang</h1>
+                <img src="assets/aset%20pendukung/Isi_Profil_Pengembang.png" alt="Profil enam pengembang Petualangan Sejarah Indonesia.">
+                <button class="developer-image-back back-asset-button" id="backFromDeveloperButton" type="button" aria-label="Kembali"></button>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-quiz" aria-labelledby="question">
+            <div class="quiz-card">
+                <div class="quiz-topline">
+                    <span id="questionCount">Materi 1 · Soal 1 dari 5 · Pilihan Ganda</span>
+                    <span id="scoreLabel">Skor: 0</span>
+                    <span class="question-timer" id="questionTimer" aria-label="Waktu tersisa">20 detik</span>
+                </div>
+                <div class="progress-track" role="progressbar" aria-label="Kemajuan soal pada materi ini" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <h2 class="question" id="question" tabindex="-1"></h2>
+                <img class="question-image" id="questionImage" hidden alt="">
+                <div class="answers" id="answers"></div>
+            </div>
+        </section>
+
+        <section class="screen" id="screen-result" aria-labelledby="result-title">
+            <div class="leaderboard-card">
+                <p class="eyebrow">Permainan Selesai!</p>
+                <h1 id="result-title" tabindex="-1">Hasil Akhir</h1>
+                <p class="leaderboard-subtitle" id="resultMessage"></p>
+                <p class="leaderboard-score"><strong id="finalScore">0</strong><span>poin</span></p>
+                <div class="podium" id="resultPodium" aria-label="Papan peringkat">
+                    <div class="podium-place podium-second">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">🥈</span><strong id="podiumSecondName">—</strong><small id="podiumSecondScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 2">2</div>
+                    </div>
+                    <div class="podium-place podium-first">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">👑</span><strong id="podiumFirstName">—</strong><small id="podiumScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 1">1</div>
+                    </div>
+                    <div class="podium-place podium-third">
+                        <div class="podium-player"><span class="medal" aria-hidden="true">🥉</span><strong id="podiumThirdName">—</strong><small id="podiumThirdScore">Belum ada skor</small></div>
+                        <div class="podium-block" aria-label="Juara 3">3</div>
+                    </div>
+                </div>
+                <section class="leaderboard-history" aria-labelledby="leaderboardHistoryTitle">
+                    <h2 id="leaderboardHistoryTitle">Peringkat Teratas</h2>
+                    <ol class="leaderboard-list" id="leaderboardList" aria-live="polite"></ol>
+                    <p class="leaderboard-storage-status" id="leaderboardStorageStatus" role="status" aria-live="polite"></p>
+                </section>
+                <button class="image-action-button back-asset-button" id="replayButton" type="button" aria-label="Kembali ke menu utama">
+                    <img src="assets/ui/back.png" alt="">
+                </button>
+            </div>
+        </section>
+        </main>
+
+        <div class="material-backdrop" id="materialBackdrop" hidden>
+            <section class="material-dialog" role="dialog" aria-modal="true" aria-labelledby="materialDialogTitle">
+                <header class="material-dialog-header">
+                    <img class="material-mascot" src="assets/mascot-boy.png" alt="">
+                    <h2 id="materialDialogTitle"></h2>
+                    <img class="material-mascot" src="assets/mascot-girl.png" alt="">
+                </header>
+                <div class="material-scroll" id="materialDialogContent"></div>
+                <div class="material-dialog-actions">
+                    <button class="button button-primary close-button" id="closeMaterialDialog" type="button">Tutup</button>
+                </div>
+            </section>
+        </div>
+
+        <div class="answer-feedback-backdrop" id="answerFeedbackBackdrop" hidden>
+            <section class="answer-feedback-card" id="answerFeedbackCard" role="dialog" aria-modal="true" aria-labelledby="answerFeedbackTitle" aria-describedby="feedbackExplanation">
+                <h2 class="visually-hidden" id="answerFeedbackTitle"></h2>
+                <div class="feedback-showcase" aria-hidden="true">
+                    <img class="feedback-character feedback-character-girl" src="assets/aset%20pendukung/karakter_cewe.png" alt="">
+                    <img class="feedback-result-image" id="feedbackResultImage" src="assets/aset%20pendukung/Jawaban_benar.png" alt="">
+                    <img class="feedback-character feedback-character-boy" src="assets/aset%20pendukung/karakter_cowo.png" alt="">
+                </div>
+                <p class="feedback-explanation" id="feedbackExplanation"></p>
+                <button class="button button-primary" id="feedbackContinueButton" type="button">Lanjut</button>
+            </section>
+        </div>
+
+        <div class="settings-backdrop" id="settingsBackdrop">
+            <section class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+                <h2 id="settingsTitle">Setting</h2>
+                <div class="settings-options">
+                    <div class="sound-toggle-row">
+                        <span id="soundToggleLabel">Audio aktif</span>
+                        <button class="sound-toggle" id="soundToggleButton" type="button" aria-label="Matikan audio" aria-pressed="true">
+                            <img id="soundToggleIcon" src="assets/ui/sound-on.png" alt="">
+                        </button>
+                    </div>
+                    <label class="volume-label" for="volume"><span>Volume audio game</span><span id="volumeValue">50%</span></label>
+                    <input class="volume-range" id="volume" type="range" min="0" max="1" step="0.1" value="0.5">
+                    <button class="button material-link settings-action-button" id="tutorialButton" type="button">
+                        <img class="settings-action-icon" src="assets/ui/tutorial.png" alt="">Tutorial Bermain
+                    </button>
+                </div>
+                <button class="button close-button" id="closeSettings" type="button">Tutup</button>
+            </section>
+        </div>
+        <audio id="correctSound" src="assets/audio/correct.ogg" preload="auto"></audio>
+        <audio id="incorrectSound" src="assets/audio/incorrect.ogg" preload="auto"></audio>
+        <audio id="clickSound" src="assets/audio/click.ogg" preload="auto"></audio>
+        <audio id="lobbyMusic" src="assets/audio/lobby-leaderboard.mp3" preload="none" loop></audio>
+        <audio id="quizMusic" src="assets/audio/quiz.mp3" preload="none" loop></audio>
+    </div>
+
+    <script src="script.js?v=podium-score-fix-1" defer></script>
+</body>
+</html>
