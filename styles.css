@@ -659,19 +659,16 @@
             cursor: pointer;
         }
         .home-menu-grid .image-menu-button img {
-            position: absolute;
-            inset: 0;
             display: block;
             width: 100%;
-            height: 100%;
-            object-fit: fill;
+            height: auto;
+            object-fit: contain;
         }
         .home-menu-grid .image-menu-button span { display: none; }
         .home-menu-grid .image-menu-button:hover { transform: translateY(-2px); filter: brightness(1.12); }
         .home-menu-grid .image-menu-button:focus-visible { outline: 2px solid #800020; outline-offset: 3px; border-radius: 16px; }
         .home-start-button,
-        .home-material-button { grid-column: 1 / -1; height: 66px; }
-        .home-learning-button { height: 52px; }
+        .home-material-button { grid-column: 1 / -1; }
         .leaderboard-home-link, .leaderboard-file-controls { display: none !important; }
         .home-back-button {
             position: relative;
@@ -1574,9 +1571,6 @@
             .start-button { min-height: 54px; }
             .home-menu { min-height: calc(100dvh - 116px); padding-bottom: 8px; }
             .home-title { margin-top: 8px; }
-            .home-start-button { height: 78px; }
-            .home-material-button { height: 50px; }
-            .home-learning-button { height: 44px; }
             .home-back-button { position: relative; bottom: auto; left: auto; align-self: flex-start; margin: 10px 0 0; }
         }
 
@@ -1603,9 +1597,6 @@
                 gap: clamp(14px, 4.6vh, 34px) 8px;
                 margin: 4px auto 0;
             }
-            .home-start-button { height: clamp(118px, 21.7vh, 160px); }
-            .home-material-button { height: clamp(70px, 13.5vh, 100px); }
-            .home-learning-button { height: clamp(56px, 9.7vh, 72px); }
             .home-back-button.back-asset-button {
                 position: absolute;
                 right: auto;

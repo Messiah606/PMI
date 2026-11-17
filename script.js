@@ -340,8 +340,8 @@
             appShell.classList.toggle("quiz-screen-active", id === "screen-quiz");
             appShell.classList.toggle("tutorial-screen-active", id === "screen-tutorial");
             appShell.classList.toggle("developer-screen-active", id === "screen-developer");
-            settingsButton.hidden = id === "screen-start" || id === "screen-developer";
-            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-quiz";
+            settingsButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-tutorial";
+            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-quiz" || id === "screen-tutorial";
             window.scrollTo(0, 0);
             updateBackgroundMusic();
         }
@@ -555,10 +555,15 @@
         }
 
         function updateDragDropQuestion(item, targetArea) {
+            const usesTapLabel = item.section === "Drag and Drop · Lengkapi Teks Proklamasi"
+                || item.section === "Drag and Drop · Mengenali Tokoh";
+            const emptyTargetLabel = usesTapLabel
+                ? "Ketuk"
+                : "Tarik atau pilih jawaban";
             targetArea.querySelectorAll(".drag-drop-target").forEach((target) => {
                 const targetIndex = Number(target.dataset.targetIndex);
                 const optionIndex = dragAssignments[targetIndex];
-                target.textContent = optionIndex === null ? "Tarik atau pilih jawaban" : item.options[optionIndex];
+                target.textContent = optionIndex === null ? emptyTargetLabel : item.options[optionIndex];
                 target.classList.toggle("is-filled", optionIndex !== null);
             });
             const optionsContainer = answersElement.querySelector(".drag-drop-options");
