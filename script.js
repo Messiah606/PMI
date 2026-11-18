@@ -252,7 +252,7 @@
                 section: "Drag and Drop · Mengenali Tokoh",
                 type: "dragDrop",
                 timeLimit: 60,
-                question: "Seret nama tokoh ke pernyataan yang sesuai.",
+                question: "Pilih nama tokoh ke pernyataan yang sesuai.",
                 parts: [
                     { prompt: "Pertama kali menyampaikan kabar kekalahan Jepang kepada Soekarno-Hatta dan mendesak proklamasi.", correct: "Sutan Syahrir" },
                     { prompt: "Memimpin pengawalan rombongan Soekarno-Hatta menuju Rengasdengklok bersama anggota PETA.", correct: "Shodanco Singgih" },
