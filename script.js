@@ -230,7 +230,7 @@
                 section: "Drag and Drop · Lengkapi Teks Proklamasi",
                 type: "dragDrop",
                 timeLimit: 60,
-                question: "Lengkapi teks Proklamasi dengan menyeret pilihan kata ke bagian yang kosong.",
+                question: "Lengkapi teks Proklamasi dengan pilih jawaban dibawah ke bagian yang kosong.",
                 passageSegments: [
                     "Kami (",
                     ") Indonesia dengan ini menjatakan (",
@@ -296,6 +296,8 @@
         const materialDialogTitle = document.getElementById("materialDialogTitle");
         const materialDialogContent = document.getElementById("materialDialogContent");
         const answerFeedbackBackdrop = document.getElementById("answerFeedbackBackdrop");
+        const feedbackActions = document.getElementById("feedbackActions");
+        const feedbackCorrectButton = document.getElementById("feedbackCorrectButton");
         const feedbackContinueButton = document.getElementById("feedbackContinueButton");
         const correctSound = document.getElementById("correctSound");
         const incorrectSound = document.getElementById("incorrectSound");
@@ -637,6 +639,57 @@
             updateDragDropQuestion(item, targetArea);
         }
 
+        function isCorrectableDragDropQuestion(item) {
+            return item.section === "Drag and Drop · Lengkapi Teks Proklamasi"
+                || item.section === "Drag and Drop · Mengenali Tokoh";
+        }
+
+        function renderCorrectableDragDropFeedback(item) {
+            const feedbackExplanation = document.getElementById("feedbackExplanation");
+            feedbackExplanation.replaceChildren();
+            const introduction = document.createElement("span");
+            introduction.className = "feedback-answer-intro";
+            introduction.textContent = "Jawaban kamu:";
+            feedbackExplanation.append(introduction);
+
+            item.parts.forEach((part, index) => {
+                const optionIndex = dragAssignments[index];
+                const answer = optionIndex === null ? "Belum dijawab" : item.options[optionIndex];
+                const entry = document.createElement("span");
+                entry.className = "feedback-answer-entry";
+                if (part.prompt) {
+                    const prompt = document.createElement("span");
+                    prompt.className = "feedback-answer-prompt";
+                    prompt.textContent = part.prompt;
+                    entry.append(prompt);
+                }
+                const line = document.createElement("span");
+                line.className = `feedback-answer-line ${answer === part.correct ? "correct" : "incorrect"}`;
+                line.textContent = part.prompt ? `Jawaban: ${answer}` : `Bagian ${index + 1}: ${answer}`;
+                entry.append(line);
+                feedbackExplanation.append(entry);
+            });
+        }
+
+        function correctDragDropAnswers() {
+            const item = questions[currentQuestion];
+            if (!isCorrectableDragDropQuestion(item)) return;
+
+            const targets = answersElement.querySelectorAll(".drag-drop-target");
+            item.parts.forEach((part, index) => {
+                const correctOptionIndex = item.options.indexOf(part.correct);
+                if (correctOptionIndex === -1) {
+                    throw new Error(`Pilihan jawaban benar tidak ditemukan: ${part.correct}`);
+                }
+                dragAssignments[index] = correctOptionIndex;
+                targets[index].textContent = part.correct;
+                targets[index].classList.remove("incorrect");
+                targets[index].classList.add("is-filled", "correct");
+            });
+            renderCorrectableDragDropFeedback(item);
+            feedbackCorrectButton.disabled = true;
+        }
+
         function finishQuestion(isCorrect, selectedIndex, isTimeout) {
             const item = questions[currentQuestion];
             if (questionAnswered) return;
@@ -688,12 +741,22 @@
                 : item.type === "fill"
                     ? item.fields.map((field) => `${field.label}: ${field.correct}`).join("\n")
                     : item.answers[item.correct];
-            document.getElementById("feedbackExplanation").textContent = isTimeout
-                ? `Sayang sekali kamu tidak menjawab.\nJawaban yang benar adalah: ${correctAnswer}`
-                : isCorrect
-                    ? `Jawaban yang benar: ${correctAnswer}`
-                    : `Jawaban yang benar adalah: ${correctAnswer}`;
-            if (currentQuestion === questions.length - 1) {
+            const isCorrectableQuestion = isCorrectableDragDropQuestion(item);
+            if (isCorrectableQuestion) {
+                renderCorrectableDragDropFeedback(item);
+            } else {
+                document.getElementById("feedbackExplanation").textContent = isTimeout
+                    ? `Sayang sekali kamu tidak menjawab.\nJawaban yang benar adalah: ${correctAnswer}`
+                    : isCorrect
+                        ? `Jawaban yang benar: ${correctAnswer}`
+                        : `Jawaban yang benar adalah: ${correctAnswer}`;
+            }
+            feedbackCorrectButton.hidden = !isCorrectableQuestion || isCorrect;
+            feedbackCorrectButton.disabled = false;
+            feedbackActions.classList.toggle("correctable-drag-drop-actions", isCorrectableQuestion && !isCorrect);
+            if (isCorrectableQuestion) {
+                feedbackContinueButton.textContent = "Lanjut";
+            } else if (currentQuestion === questions.length - 1) {
                 feedbackContinueButton.textContent = "Lihat Hasil";
             } else if (currentQuestion + 1 === getVideoQuestionStart(currentVideoIndex) + questionsPerVideo[currentVideoIndex]
                 && currentVideoIndex < videos.length - 1) {
@@ -1371,6 +1434,7 @@
             if (event.target === materialBackdrop) closeMaterialDialog();
         });
         feedbackContinueButton.addEventListener("click", closeAnswerFeedback);
+        feedbackCorrectButton.addEventListener("click", correctDragDropAnswers);
         profileButton.addEventListener("click", () => {
             settingsReturnScreen = "screen-home";
             showScreen("screen-developer");
