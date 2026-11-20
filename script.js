@@ -343,7 +343,7 @@
             appShell.classList.toggle("tutorial-screen-active", id === "screen-tutorial");
             appShell.classList.toggle("developer-screen-active", id === "screen-developer");
             settingsButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-tutorial";
-            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-quiz" || id === "screen-tutorial";
+            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-video" || id === "screen-quiz" || id === "screen-tutorial";
             window.scrollTo(0, 0);
             updateBackgroundMusic();
         }
