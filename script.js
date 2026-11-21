@@ -264,10 +264,11 @@
             }
         ];
 
+        const videoBaseUrl = "https://media.githubusercontent.com/media/Messiah606/PMI/main/assets/videos/";
         const videos = [
-            { title: "Materi 1 — Peristiwa Rengasdengklok", sources: ["assets/videos/materi-1-h264.mp4", "assets/videos/materi-1.webm"] },
-            { title: "Materi 2 — Perumusan Naskah Proklamasi", sources: ["assets/videos/materi-2-h264.mp4", "assets/videos/materi-2.webm"] },
-            { title: "Materi 3 — Proklamasi dan Penyebaran Berita", sources: ["assets/videos/materi-3-h264.mp4", "assets/videos/materi-3.webm"] }
+            { title: "Materi 1 — Peristiwa Rengasdengklok", source: `${videoBaseUrl}materi-1-h264.mp4` },
+            { title: "Materi 2 — Perumusan Naskah Proklamasi", source: `${videoBaseUrl}materi-2-h264.mp4` },
+            { title: "Materi 3 — Proklamasi dan Penyebaran Berita", source: `${videoBaseUrl}materi-3-h264.mp4` }
         ];
         const questionsPerVideo = [5, 5, 7];
         const screens = document.querySelectorAll(".screen");
@@ -286,6 +287,7 @@
         const playerNameInput = document.getElementById("playerName");
         const materialVideo = document.getElementById("materialVideo");
         const videoStatus = document.getElementById("videoStatus");
+        const backFromVideoButton = document.getElementById("backFromVideoButton");
         const videoNextButton = document.getElementById("videoNextButton");
         const videoSeekBackButton = document.getElementById("videoSeekBackButton");
         const videoPlayPauseButton = document.getElementById("videoPlayPauseButton");
@@ -315,7 +317,6 @@
         ]);
         let currentQuestion = 0;
         let currentVideoIndex = 0;
-        let currentVideoSourceIndex = 0;
         let videoStatusBeforeExpansion = null;
         let score = 0;
         let volume = Number(volumeInput.value);
@@ -323,6 +324,7 @@
         let playerName = "Kamu";
         let materialReturnScreen = "screen-home";
         let settingsReturnScreen = "screen-home";
+        let profileReturnScreen = "screen-home";
         let questionTimerInterval;
         let timeRemaining = 20;
         let questionAnswered = false;
@@ -343,7 +345,7 @@
             appShell.classList.toggle("tutorial-screen-active", id === "screen-tutorial");
             appShell.classList.toggle("developer-screen-active", id === "screen-developer");
             settingsButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-tutorial";
-            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-video" || id === "screen-quiz" || id === "screen-tutorial";
+            profileButton.hidden = id === "screen-start" || id === "screen-developer" || id === "screen-quiz" || id === "screen-tutorial";
             window.scrollTo(0, 0);
             updateBackgroundMusic();
         }
@@ -1161,7 +1163,6 @@
                 throw new RangeError(`Indeks video tidak valid: ${index}`);
             }
             currentVideoIndex = index;
-            currentVideoSourceIndex = 0;
             loadCurrentVideoSource();
             videoStatus.textContent = "";
             document.getElementById("videoEyebrow").textContent = `Materi ${index + 1} dari ${videos.length}`;
@@ -1175,7 +1176,7 @@
         function loadCurrentVideoSource() {
             const video = videos[currentVideoIndex];
             materialVideo.pause();
-            materialVideo.src = video.sources[currentVideoSourceIndex];
+            materialVideo.src = video.source;
             materialVideo.load();
         }
 
@@ -1197,10 +1198,8 @@
                         return;
                     }
                     const video = videos[currentVideoIndex];
-                    if (currentVideoSourceIndex < video.sources.length - 1) return;
-                    const source = video.sources[currentVideoSourceIndex];
                     videoStatus.textContent = videoPlaybackErrorMessage(video);
-                    console.error(`Video tidak dapat diputar: ${source}`, error);
+                    console.error(`Video tidak dapat diputar: ${video.source}`, error);
                 });
             }
         }
@@ -1210,7 +1209,9 @@
             const progress = Number.isFinite(duration) && duration > 0 ? materialVideo.currentTime / duration : 0;
             videoSeekBar.value = String(Math.round(progress * Number(videoSeekBar.max)));
             videoSeekBar.style.setProperty("--seek-progress", `${progress * 100}%`);
-            videoPlayPauseButton.textContent = materialVideo.paused ? "▶" : "Ⅱ";
+            videoPlayPauseButton.innerHTML = materialVideo.paused
+                ? '<svg class="video-control-icon video-play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
+                : '<svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>';
             videoPlayPauseButton.setAttribute("aria-label", materialVideo.paused ? "Putar video" : "Jeda video");
         }
 
@@ -1290,7 +1291,9 @@
             frame.classList.toggle("is-portrait-fallback", expanded && window.matchMedia("(orientation: portrait)").matches);
             videoExpandButton.setAttribute("aria-pressed", String(expanded));
             videoExpandButton.setAttribute("aria-label", expanded ? "Kembalikan ukuran video" : "Perbesar video");
-            videoExpandButton.textContent = expanded ? "×" : "⛶";
+            videoExpandButton.innerHTML = expanded
+                ? '<svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+                : '<svg class="video-control-icon video-expand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg>';
         }
 
         function seekVideoBy(seconds) {
@@ -1335,6 +1338,7 @@
             showScreen(materialReturnScreen);
             document.getElementById("openMaterialButton").focus();
         });
+        backFromVideoButton.addEventListener("click", returnToMenu);
         videoNextButton.addEventListener("click", startVideoQuiz);
         videoExpandButton.addEventListener("click", () => void toggleVideoExpansion());
         document.addEventListener("fullscreenchange", () => {
@@ -1360,20 +1364,14 @@
         ["loadedmetadata", "durationchange", "timeupdate", "play", "pause", "ended"].forEach((eventName) => {
             materialVideo.addEventListener(eventName, updateVideoControls);
         });
-        document.getElementById("materialVideo").addEventListener("error", () => {
+        materialVideo.addEventListener("playing", () => {
+            videoStatus.textContent = "";
+        });
+        materialVideo.addEventListener("error", () => {
             const video = videos[currentVideoIndex];
             if (materialVideo.error && materialVideo.error.code === MediaError.MEDIA_ERR_ABORTED) return;
-            const source = video.sources[currentVideoSourceIndex];
-            if (!materialVideo.currentSrc.endsWith(source)) return;
-            if (currentVideoSourceIndex < video.sources.length - 1) {
-                currentVideoSourceIndex += 1;
-                videoStatus.textContent = "";
-                loadCurrentVideoSource();
-                playCurrentVideo();
-                return;
-            }
             videoStatus.textContent = videoPlaybackErrorMessage(video);
-            console.error(`Video tidak dapat diputar: ${source}`, materialVideo.error);
+            console.error(`Video tidak dapat diputar: ${video.source}`, materialVideo.error);
         });
 
         document.getElementById("backToStartButton").addEventListener("click", () => {
@@ -1436,13 +1434,13 @@
         feedbackContinueButton.addEventListener("click", closeAnswerFeedback);
         feedbackCorrectButton.addEventListener("click", correctDragDropAnswers);
         profileButton.addEventListener("click", () => {
-            settingsReturnScreen = "screen-home";
+            profileReturnScreen = document.querySelector(".screen.active").id;
             showScreen("screen-developer");
             document.getElementById("backFromDeveloperButton").focus();
         });
         document.getElementById("tutorialButton").addEventListener("click", () => showSettingsSubscreen("screen-tutorial"));
         document.getElementById("backFromDeveloperButton").addEventListener("click", () => {
-            showScreen(settingsReturnScreen);
+            showScreen(profileReturnScreen);
             profileButton.focus();
         });
         document.getElementById("backFromTutorialButton").addEventListener("click", returnToSettings);
