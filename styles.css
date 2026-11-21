@@ -513,6 +513,7 @@
         .image-action-button:disabled { cursor: wait; opacity: .72; }
         .image-action-button:focus-visible { outline: 3px solid #800020; outline-offset: 4px; }
         .image-action-button img { display: block; width: clamp(94px, 30vw, 132px); height: auto; }
+        .back-asset-button[hidden] { display: none !important; }
 
         .player-form {
             display: grid;

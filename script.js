@@ -1163,6 +1163,7 @@
                 throw new RangeError(`Indeks video tidak valid: ${index}`);
             }
             currentVideoIndex = index;
+            backFromVideoButton.hidden = index !== 0;
             loadCurrentVideoSource();
             videoStatus.textContent = "";
             document.getElementById("videoEyebrow").textContent = `Materi ${index + 1} dari ${videos.length}`;
