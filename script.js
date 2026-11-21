@@ -307,8 +307,17 @@
         const lobbyMusic = document.getElementById("lobbyMusic");
         const quizMusic = document.getElementById("quizMusic");
         const soundEffects = [correctSound, incorrectSound, clickSound];
+        const soundEffectPools = new Map(soundEffects.map((audio) => [audio, [
+            audio,
+            ...Array.from({ length: 2 }, () => {
+                const clone = audio.cloneNode();
+                clone.preload = "auto";
+                return clone;
+            })
+        ]]));
+        const allSoundEffectAudio = [...soundEffectPools.values()].flat();
         const backgroundMusicElements = [lobbyMusic, quizMusic];
-        const audioElements = [...soundEffects, ...backgroundMusicElements];
+        const audioElements = [...allSoundEffectAudio, ...backgroundMusicElements];
         // Skip the silent lead-in in the supplied sound-effect files.
         const soundStartTimes = new Map([
             [correctSound, 0.07],
@@ -378,7 +387,7 @@
                 audio.volume = soundEnabled ? volume : 0;
             });
             if (!soundEnabled) {
-                soundEffects.forEach((audio) => {
+                allSoundEffectAudio.forEach((audio) => {
                     audio.pause();
                     audio.currentTime = 0;
                 });
@@ -388,9 +397,11 @@
 
         function playSound(audio, label) {
             if (!soundEnabled || volume === 0) return;
-            audio.currentTime = soundStartTimes.get(audio) || 0;
-            audio.volume = volume;
-            const playback = audio.play();
+            const pool = soundEffectPools.get(audio) || [audio];
+            const effect = pool.find((candidate) => candidate.paused || candidate.ended) || pool[0];
+            effect.currentTime = soundStartTimes.get(audio) || 0;
+            effect.volume = volume;
+            const playback = effect.play();
             if (playback && typeof playback.catch === "function") {
                 playback.catch((error) => {
                     if (error.name !== "AbortError") console.error(`${label} tidak dapat diputar.`, error);
@@ -1490,10 +1501,7 @@
             applySoundSettings();
         });
         function playButtonSound(event) {
-            const button = event.target.closest("button");
-            if (button && !button.classList.contains("answer") && !button.classList.contains("sound-toggle")) {
-                playSound(clickSound, "Efek klik");
-            }
+            if (event.target.closest("button")) playSound(clickSound, "Efek klik");
         }
         document.addEventListener("pointerdown", (event) => {
             if (event.button === 0) playButtonSound(event);
@@ -1508,7 +1516,7 @@
                 console.error(`Audio tidak dapat dimuat: ${audio.currentSrc || audio.src}`);
             });
         });
-        soundEffects.forEach((audio) => audio.load());
+        allSoundEffectAudio.forEach((audio) => audio.load());
         void refreshLeaderboardConnectionStatus();
         const welcomeSplash = document.getElementById("welcomeSplash");
         const welcomeDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 350 : 2300;
