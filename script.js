@@ -270,6 +270,27 @@
             { title: "Materi 2 — Perumusan Naskah Proklamasi", source: `${videoBaseUrl}materi-2-h264.mp4` },
             { title: "Materi 3 — Proklamasi dan Penyebaran Berita", source: `${videoBaseUrl}materi-3-h264.mp4` }
         ];
+        const menuAssets = [
+            "assets/aset%20pendukung/judul.png",
+            "assets/aset%20pendukung/Tombol_Mulai_Game.png",
+            "assets/aset%20pendukung/MATERI.png",
+            "assets/aset%20pendukung/Capaian_Pembelajaran.png",
+            "assets/aset%20pendukung/Tujuan_Pembelajaran.png",
+            "assets/ui/settings.png",
+            "assets/ui/developers.png",
+            "assets/ui/back.png",
+            "assets/ui/next.png"
+        ];
+        const materialAssets = [
+            [],
+            [
+                "assets/aset%20pendukung/Rumah_Laksamana_Maeda_Materi_2.png",
+                "assets/aset%20pendukung/Naskah_Proklamasi_Ketikan_Sayuti_Melik_Materi_2.png",
+                "assets/aset%20pendukung/Naskah_Proklamasi_Tulisan_Ir._Sorkarno_Materi_2.png",
+                "assets/aset%20pendukung/Ruang_Pengetikan_Naskah_Proklamasi_Materi_2_Soal_ke_5.png"
+            ],
+            ["assets/aset%20pendukung/Pembacaan_Teks_Proklamasi_Kemerdekaan_Indonesia_Materi_4.png"]
+        ];
         const questionsPerVideo = [5, 5, 7];
         const screens = document.querySelectorAll(".screen");
         const questionElement = document.getElementById("question");
@@ -407,6 +428,40 @@
                     if (error.name !== "AbortError") console.error(`${label} tidak dapat diputar.`, error);
                 });
             }
+        }
+
+        const preloadVideos = new Map();
+
+        function preloadAssets(assets) {
+            assets.forEach((source) => {
+                const image = new Image();
+                image.src = source;
+            });
+        }
+
+        function preloadVideoMetadata(index) {
+            if (preloadVideos.has(index)) return;
+            const preview = document.createElement("video");
+            preview.preload = "metadata";
+            preview.src = videos[index].source;
+            preview.load();
+            preloadVideos.set(index, preview);
+        }
+
+        function unlockSoundEffects() {
+            allSoundEffectAudio.forEach((audio) => {
+                audio.muted = true;
+                const playback = audio.play();
+                if (playback && typeof playback.then === "function") {
+                    playback.then(() => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        audio.muted = false;
+                    }).catch(() => {
+                        audio.muted = false;
+                    });
+                }
+            });
         }
 
         function updateSoundControls() {
@@ -1182,6 +1237,11 @@
             updateVideoControls();
             showScreen("screen-video");
             playCurrentVideo();
+            const nextVideoIndex = index + 1;
+            if (nextVideoIndex < videos.length) {
+                preloadAssets(materialAssets[nextVideoIndex]);
+                preloadVideoMetadata(nextVideoIndex);
+            }
             videoNextButton.focus();
         }
 
@@ -1342,6 +1402,7 @@
         }
 
         document.getElementById("startButton").addEventListener("click", () => {
+            unlockSoundEffects();
             showScreen("screen-player");
             playerNameInput.focus();
         });
@@ -1405,6 +1466,9 @@
                 return;
             }
             playerNameInput.setCustomValidity("");
+            preloadAssets(menuAssets);
+            preloadAssets(materialAssets[0]);
+            preloadVideoMetadata(0);
             showScreen("screen-home");
             document.getElementById("startGameButton").focus();
         });
@@ -1517,6 +1581,11 @@
             });
         });
         allSoundEffectAudio.forEach((audio) => audio.load());
+        if ("serviceWorker" in navigator && window.location.protocol !== "file:") {
+            navigator.serviceWorker.register("sw.js").catch((error) => {
+                console.error("Cache offline tidak dapat diaktifkan.", error);
+            });
+        }
         void refreshLeaderboardConnectionStatus();
         const welcomeSplash = document.getElementById("welcomeSplash");
         const welcomeDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 350 : 2300;
