@@ -868,24 +868,6 @@
         }
 
         const DEFAULT_LEADERBOARD = [
-            { id: "1794810762127-5e7c840f6bb388", name: "Rusdi", score: 11, totalQuestions: 15, completedAt: "2026-11-16T06:32:42.1270000Z" },
-            { id: "1794811982119-ba9b0e28eaf358", name: "kharis cantik", score: 10, totalQuestions: 15, completedAt: "2026-11-16T06:53:02.1130000Z" },
-            { id: "b16d3538-e727-4834-be9f-3baa533f98c1", name: "kon", score: 10, totalQuestions: 15, completedAt: "2026-11-16T09:01:07.5350000Z" },
-            { id: "2620d8f3-e7ac-4db7-95fa-5ce7c36caec3", name: "ye", score: 10, totalQuestions: 15, completedAt: "2026-11-16T09:03:01.4270000Z" },
-            { id: "a91a6055-23fc-4291-af41-0f1e8495af0a", name: "g", score: 10, totalQuestions: 15, completedAt: "2026-11-16T13:03:50.8910000Z" },
-            { id: "3e834cd7-20c9-441f-b257-e0af4c465e7b", name: "h", score: 10, totalQuestions: 15, completedAt: "2026-11-16T13:09:07.8160000Z" },
-            { id: "e1db2298-32f1-445e-8e90-c9924a2ace0e", name: "Halo", score: 9, totalQuestions: 15, completedAt: "2026-11-16T10:19:17.0300000Z" },
-            { id: "1794810454738-c5504dbc08c088", name: "jj", score: 8, totalQuestions: 15, completedAt: "2026-11-16T06:27:34.7320000Z" },
-            { id: "1794810557395-bbf1a13ea2a498", name: "Rusdi", score: 8, totalQuestions: 15, completedAt: "2026-11-16T06:29:17.3940000Z" },
-            { id: "8ef9b0ff-1f49-459d-a155-4139b6a0ff70", name: "bhart", score: 8, totalQuestions: 15, completedAt: "2026-11-16T08:54:14.6260000Z" },
-            { id: "df822cc2-1609-403d-92aa-4c3618916fb1", name: "j", score: 7, totalQuestions: 15, completedAt: "2026-11-16T05:57:28.9330000Z" },
-            { id: "1794812439747-0a92070cdf1058", name: "kharis cantik", score: 7, totalQuestions: 15, completedAt: "2026-11-16T07:00:39.7470000Z" },
-            { id: "27f59458-1b30-4345-b3e5-bcfd96bfac3e", name: "bharat", score: 7, totalQuestions: 15, completedAt: "2026-11-16T08:51:34.5050000Z" },
-            { id: "4b4713fb-b95c-41a1-a8f3-8b6e2d12e73b", name: "y", score: 7, totalQuestions: 15, completedAt: "2026-11-16T09:10:36.8620000Z" },
-            { id: "d03311d5-0026-4556-ab07-83b6bff53899", name: "Aysel", score: 7, totalQuestions: 15, completedAt: "2026-11-16T09:32:35.4340000Z" },
-            { id: "ab416c3b-3358-423e-a194-a47ce651697f", name: "v", score: 6, totalQuestions: 15, completedAt: "2026-11-16T12:40:42.9380000Z" },
-            { id: "9bc47fc4-30e5-4f2b-bb9b-d1f7f07e7dfa", name: "Regression", score: 6, totalQuestions: 15, completedAt: "2026-11-16T13:12:20.7590000Z" },
-            { id: "8a15661a-7fc0-4fe4-883d-292a85cfac4e", name: "Regression", score: 6, totalQuestions: 15, completedAt: "2026-11-16T13:14:52.5750000Z" }
         ];
 
         const LOCAL_STORAGE_LEADERBOARD_KEY = "pmi_leaderboard_custom_entries";
