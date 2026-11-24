@@ -156,27 +156,16 @@
                 <div class="video-frame">
                     <video class="video-player" id="materialVideo" playsinline preload="metadata"></video>
                     <div class="video-frame-controls" aria-label="Kontrol video">
-                        <button class="video-control-button" id="videoSeekBackButton" type="button" aria-label="Mundur 10 detik">
-                            <svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14M19 6 11 12l8 6zM11 6 3 12l8 6z"/></svg>
-                        </button>
-                        <button class="video-control-button video-play-button" id="videoPlayPauseButton" type="button" aria-label="Putar video">
-                            <svg class="video-control-icon video-play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-                        </button>
-                        <button class="video-control-button" id="videoSeekForwardButton" type="button" aria-label="Maju 10 detik">
-                            <svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14M5 6l8 6-8 6zM13 6l8 6-8 6z"/></svg>
-                        </button>
+                        <button class="video-control-button" id="videoSeekBackButton" type="button" aria-label="Mundur 10 detik">◀◀</button>
+                        <button class="video-control-button video-play-button" id="videoPlayPauseButton" type="button" aria-label="Putar video">▶</button>
+                        <button class="video-control-button" id="videoSeekForwardButton" type="button" aria-label="Maju 10 detik">▶▶</button>
                         <input class="video-seek" id="videoSeekBar" type="range" min="0" max="1000" value="0" aria-label="Posisi video">
-                        <button class="video-control-button video-expand-button" id="videoExpandButton" type="button" aria-label="Perbesar video" aria-pressed="false">
-                            <svg class="video-control-icon video-expand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg>
-                        </button>
+                        <button class="video-control-button video-expand-button" id="videoExpandButton" type="button" aria-label="Perbesar video" aria-pressed="false">⛶</button>
                     </div>
                     <img class="video-frame-art" src="assets/aset%20pendukung/Frame_Video_Updated.png" alt="" aria-hidden="true">
                 </div>
                 <p class="video-status" id="videoStatus" role="status" aria-live="polite"></p>
                 <div class="video-actions">
-                    <button class="image-action-button back-asset-button" id="backFromVideoButton" type="button" aria-label="Kembali ke menu utama">
-                        <img src="assets/ui/back.png" alt="">
-                    </button>
                     <button class="image-action-button video-next-button" id="videoNextButton" type="button" aria-label="Lanjut ke soal materi ini">
                         <img src="assets/ui/next.png" alt="">
                     </button>
@@ -319,9 +308,9 @@
                 <button class="button close-button" id="closeSettings" type="button">Tutup</button>
             </section>
         </div>
-        <audio id="correctSound" src="assets/audio/correct.mp3" preload="auto"></audio>
-        <audio id="incorrectSound" src="assets/audio/incorrect.mp3" preload="auto"></audio>
-        <audio id="clickSound" src="assets/audio/click.mp3" preload="auto"></audio>
+        <audio id="correctSound" src="assets/audio/correct.ogg" preload="auto"></audio>
+        <audio id="incorrectSound" src="assets/audio/incorrect.ogg" preload="auto"></audio>
+        <audio id="clickSound" src="assets/audio/click.ogg" preload="auto"></audio>
         <audio id="lobbyMusic" src="assets/audio/lobby-leaderboard.mp3" preload="none" loop></audio>
         <audio id="quizMusic" src="assets/audio/quiz.mp3" preload="none" loop></audio>
     </div>

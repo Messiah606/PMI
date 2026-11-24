@@ -264,32 +264,10 @@
             }
         ];
 
-        const videoBaseUrl = "https://media.githubusercontent.com/media/Messiah606/PMI/main/assets/videos/";
         const videos = [
-            { title: "Materi 1 — Peristiwa Rengasdengklok", source: `${videoBaseUrl}materi-1-h264.mp4` },
-            { title: "Materi 2 — Perumusan Naskah Proklamasi", source: `${videoBaseUrl}materi-2-h264.mp4` },
-            { title: "Materi 3 — Proklamasi dan Penyebaran Berita", source: `${videoBaseUrl}materi-3-h264.mp4` }
-        ];
-        const menuAssets = [
-            "assets/aset%20pendukung/judul.png",
-            "assets/aset%20pendukung/Tombol_Mulai_Game.png",
-            "assets/aset%20pendukung/MATERI.png",
-            "assets/aset%20pendukung/Capaian_Pembelajaran.png",
-            "assets/aset%20pendukung/Tujuan_Pembelajaran.png",
-            "assets/ui/settings.png",
-            "assets/ui/developers.png",
-            "assets/ui/back.png",
-            "assets/ui/next.png"
-        ];
-        const materialAssets = [
-            [],
-            [
-                "assets/aset%20pendukung/Rumah_Laksamana_Maeda_Materi_2.png",
-                "assets/aset%20pendukung/Naskah_Proklamasi_Ketikan_Sayuti_Melik_Materi_2.png",
-                "assets/aset%20pendukung/Naskah_Proklamasi_Tulisan_Ir._Sorkarno_Materi_2.png",
-                "assets/aset%20pendukung/Ruang_Pengetikan_Naskah_Proklamasi_Materi_2_Soal_ke_5.png"
-            ],
-            ["assets/aset%20pendukung/Pembacaan_Teks_Proklamasi_Kemerdekaan_Indonesia_Materi_4.png"]
+            { title: "Materi 1 — Peristiwa Rengasdengklok", sources: ["assets/videos/materi-1-h264.mp4", "assets/videos/materi-1.webm"] },
+            { title: "Materi 2 — Perumusan Naskah Proklamasi", sources: ["assets/videos/materi-2-h264.mp4", "assets/videos/materi-2.webm"] },
+            { title: "Materi 3 — Proklamasi dan Penyebaran Berita", sources: ["assets/videos/materi-3-h264.mp4", "assets/videos/materi-3.webm"] }
         ];
         const questionsPerVideo = [5, 5, 7];
         const screens = document.querySelectorAll(".screen");
@@ -308,7 +286,6 @@
         const playerNameInput = document.getElementById("playerName");
         const materialVideo = document.getElementById("materialVideo");
         const videoStatus = document.getElementById("videoStatus");
-        const backFromVideoButton = document.getElementById("backFromVideoButton");
         const videoNextButton = document.getElementById("videoNextButton");
         const videoSeekBackButton = document.getElementById("videoSeekBackButton");
         const videoPlayPauseButton = document.getElementById("videoPlayPauseButton");
@@ -328,17 +305,8 @@
         const lobbyMusic = document.getElementById("lobbyMusic");
         const quizMusic = document.getElementById("quizMusic");
         const soundEffects = [correctSound, incorrectSound, clickSound];
-        const soundEffectPools = new Map(soundEffects.map((audio) => [audio, [
-            audio,
-            ...Array.from({ length: 2 }, () => {
-                const clone = audio.cloneNode();
-                clone.preload = "auto";
-                return clone;
-            })
-        ]]));
-        const allSoundEffectAudio = [...soundEffectPools.values()].flat();
         const backgroundMusicElements = [lobbyMusic, quizMusic];
-        const audioElements = [...allSoundEffectAudio, ...backgroundMusicElements];
+        const audioElements = [...soundEffects, ...backgroundMusicElements];
         // Skip the silent lead-in in the supplied sound-effect files.
         const soundStartTimes = new Map([
             [correctSound, 0.07],
@@ -347,6 +315,7 @@
         ]);
         let currentQuestion = 0;
         let currentVideoIndex = 0;
+        let currentVideoSourceIndex = 0;
         let videoStatusBeforeExpansion = null;
         let score = 0;
         let volume = Number(volumeInput.value);
@@ -408,7 +377,7 @@
                 audio.volume = soundEnabled ? volume : 0;
             });
             if (!soundEnabled) {
-                allSoundEffectAudio.forEach((audio) => {
+                soundEffects.forEach((audio) => {
                     audio.pause();
                     audio.currentTime = 0;
                 });
@@ -418,50 +387,14 @@
 
         function playSound(audio, label) {
             if (!soundEnabled || volume === 0) return;
-            const pool = soundEffectPools.get(audio) || [audio];
-            const effect = pool.find((candidate) => candidate.paused || candidate.ended) || pool[0];
-            effect.currentTime = soundStartTimes.get(audio) || 0;
-            effect.volume = volume;
-            const playback = effect.play();
+            audio.currentTime = soundStartTimes.get(audio) || 0;
+            audio.volume = volume;
+            const playback = audio.play();
             if (playback && typeof playback.catch === "function") {
                 playback.catch((error) => {
                     if (error.name !== "AbortError") console.error(`${label} tidak dapat diputar.`, error);
                 });
             }
-        }
-
-        const preloadVideos = new Map();
-
-        function preloadAssets(assets) {
-            assets.forEach((source) => {
-                const image = new Image();
-                image.src = source;
-            });
-        }
-
-        function preloadVideoMetadata(index) {
-            if (preloadVideos.has(index)) return;
-            const preview = document.createElement("video");
-            preview.preload = "metadata";
-            preview.src = videos[index].source;
-            preview.load();
-            preloadVideos.set(index, preview);
-        }
-
-        function unlockSoundEffects() {
-            allSoundEffectAudio.forEach((audio) => {
-                audio.muted = true;
-                const playback = audio.play();
-                if (playback && typeof playback.then === "function") {
-                    playback.then(() => {
-                        audio.pause();
-                        audio.currentTime = 0;
-                        audio.muted = false;
-                    }).catch(() => {
-                        audio.muted = false;
-                    });
-                }
-            });
         }
 
         function updateSoundControls() {
@@ -867,10 +800,17 @@
             questionElement.focus();
         }
 
-        const DEFAULT_LEADERBOARD = [
-        ];
-
         const LOCAL_STORAGE_LEADERBOARD_KEY = "pmi_leaderboard_custom_entries";
+        const LOCAL_STORAGE_LEADERBOARD_RESET_KEY = "pmi_leaderboard_reset_20261124";
+
+        try {
+            if (localStorage.getItem(LOCAL_STORAGE_LEADERBOARD_RESET_KEY) !== "done") {
+                localStorage.removeItem(LOCAL_STORAGE_LEADERBOARD_KEY);
+                localStorage.setItem(LOCAL_STORAGE_LEADERBOARD_RESET_KEY, "done");
+            }
+        } catch (err) {
+            console.warn("Gagal mengosongkan data leaderboard browser:", err);
+        }
 
         function getLocalStorageEntries() {
             try {
@@ -960,7 +900,7 @@
             } catch (_) {}
 
             if (!baseList || !Array.isArray(baseList) || !baseList.length) {
-                baseList = DEFAULT_LEADERBOARD.slice();
+                baseList = [];
             }
 
             const localList = getLocalStorageEntries();
@@ -1211,7 +1151,7 @@
                 throw new RangeError(`Indeks video tidak valid: ${index}`);
             }
             currentVideoIndex = index;
-            backFromVideoButton.hidden = index !== 0;
+            currentVideoSourceIndex = 0;
             loadCurrentVideoSource();
             videoStatus.textContent = "";
             document.getElementById("videoEyebrow").textContent = `Materi ${index + 1} dari ${videos.length}`;
@@ -1219,18 +1159,13 @@
             updateVideoControls();
             showScreen("screen-video");
             playCurrentVideo();
-            const nextVideoIndex = index + 1;
-            if (nextVideoIndex < videos.length) {
-                preloadAssets(materialAssets[nextVideoIndex]);
-                preloadVideoMetadata(nextVideoIndex);
-            }
             videoNextButton.focus();
         }
 
         function loadCurrentVideoSource() {
             const video = videos[currentVideoIndex];
             materialVideo.pause();
-            materialVideo.src = video.source;
+            materialVideo.src = video.sources[currentVideoSourceIndex];
             materialVideo.load();
         }
 
@@ -1252,8 +1187,10 @@
                         return;
                     }
                     const video = videos[currentVideoIndex];
+                    if (currentVideoSourceIndex < video.sources.length - 1) return;
+                    const source = video.sources[currentVideoSourceIndex];
                     videoStatus.textContent = videoPlaybackErrorMessage(video);
-                    console.error(`Video tidak dapat diputar: ${video.source}`, error);
+                    console.error(`Video tidak dapat diputar: ${source}`, error);
                 });
             }
         }
@@ -1263,9 +1200,7 @@
             const progress = Number.isFinite(duration) && duration > 0 ? materialVideo.currentTime / duration : 0;
             videoSeekBar.value = String(Math.round(progress * Number(videoSeekBar.max)));
             videoSeekBar.style.setProperty("--seek-progress", `${progress * 100}%`);
-            videoPlayPauseButton.innerHTML = materialVideo.paused
-                ? '<svg class="video-control-icon video-play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
-                : '<svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>';
+            videoPlayPauseButton.textContent = materialVideo.paused ? "▶" : "Ⅱ";
             videoPlayPauseButton.setAttribute("aria-label", materialVideo.paused ? "Putar video" : "Jeda video");
         }
 
@@ -1345,9 +1280,7 @@
             frame.classList.toggle("is-portrait-fallback", expanded && window.matchMedia("(orientation: portrait)").matches);
             videoExpandButton.setAttribute("aria-pressed", String(expanded));
             videoExpandButton.setAttribute("aria-label", expanded ? "Kembalikan ukuran video" : "Perbesar video");
-            videoExpandButton.innerHTML = expanded
-                ? '<svg class="video-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
-                : '<svg class="video-control-icon video-expand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg>';
+            videoExpandButton.textContent = expanded ? "×" : "⛶";
         }
 
         function seekVideoBy(seconds) {
@@ -1384,7 +1317,6 @@
         }
 
         document.getElementById("startButton").addEventListener("click", () => {
-            unlockSoundEffects();
             showScreen("screen-player");
             playerNameInput.focus();
         });
@@ -1393,7 +1325,6 @@
             showScreen(materialReturnScreen);
             document.getElementById("openMaterialButton").focus();
         });
-        backFromVideoButton.addEventListener("click", returnToMenu);
         videoNextButton.addEventListener("click", startVideoQuiz);
         videoExpandButton.addEventListener("click", () => void toggleVideoExpansion());
         document.addEventListener("fullscreenchange", () => {
@@ -1419,14 +1350,20 @@
         ["loadedmetadata", "durationchange", "timeupdate", "play", "pause", "ended"].forEach((eventName) => {
             materialVideo.addEventListener(eventName, updateVideoControls);
         });
-        materialVideo.addEventListener("playing", () => {
-            videoStatus.textContent = "";
-        });
-        materialVideo.addEventListener("error", () => {
+        document.getElementById("materialVideo").addEventListener("error", () => {
             const video = videos[currentVideoIndex];
             if (materialVideo.error && materialVideo.error.code === MediaError.MEDIA_ERR_ABORTED) return;
+            const source = video.sources[currentVideoSourceIndex];
+            if (!materialVideo.currentSrc.endsWith(source)) return;
+            if (currentVideoSourceIndex < video.sources.length - 1) {
+                currentVideoSourceIndex += 1;
+                videoStatus.textContent = "";
+                loadCurrentVideoSource();
+                playCurrentVideo();
+                return;
+            }
             videoStatus.textContent = videoPlaybackErrorMessage(video);
-            console.error(`Video tidak dapat diputar: ${video.source}`, materialVideo.error);
+            console.error(`Video tidak dapat diputar: ${source}`, materialVideo.error);
         });
 
         document.getElementById("backToStartButton").addEventListener("click", () => {
@@ -1448,9 +1385,6 @@
                 return;
             }
             playerNameInput.setCustomValidity("");
-            preloadAssets(menuAssets);
-            preloadAssets(materialAssets[0]);
-            preloadVideoMetadata(0);
             showScreen("screen-home");
             document.getElementById("startGameButton").focus();
         });
@@ -1547,7 +1481,10 @@
             applySoundSettings();
         });
         function playButtonSound(event) {
-            if (event.target.closest("button")) playSound(clickSound, "Efek klik");
+            const button = event.target.closest("button");
+            if (button && !button.classList.contains("answer") && !button.classList.contains("sound-toggle")) {
+                playSound(clickSound, "Efek klik");
+            }
         }
         document.addEventListener("pointerdown", (event) => {
             if (event.button === 0) playButtonSound(event);
@@ -1562,12 +1499,7 @@
                 console.error(`Audio tidak dapat dimuat: ${audio.currentSrc || audio.src}`);
             });
         });
-        allSoundEffectAudio.forEach((audio) => audio.load());
-        if ("serviceWorker" in navigator && window.location.protocol !== "file:") {
-            navigator.serviceWorker.register("sw.js").catch((error) => {
-                console.error("Cache offline tidak dapat diaktifkan.", error);
-            });
-        }
+        soundEffects.forEach((audio) => audio.load());
         void refreshLeaderboardConnectionStatus();
         const welcomeSplash = document.getElementById("welcomeSplash");
         const welcomeDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 350 : 2300;

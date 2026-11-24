@@ -400,15 +400,25 @@
             border-radius: 4px;
             background: linear-gradient(#b32212, #8e170c);
             color: #f6edcf;
+            font: inherit;
+            font-size: clamp(.72rem, 2vw, 1.1rem);
+            font-weight: 900;
+            text-shadow: 1px 1px #171416;
             cursor: pointer;
             box-shadow: inset 0 0 0 1px rgba(246, 237, 207, .45);
         }
-        .video-control-icon { width: 62%; height: 62%; fill: none; stroke: currentColor; stroke-linecap: square; stroke-linejoin: miter; stroke-width: 2.4; }
-        .video-play-icon { fill: currentColor; stroke: none; }
         .video-control-button:hover { color: #fff; }
-        .video-play-button { background: #f6edcf; color: #a51d10; }
-        .video-expand-button { width: clamp(32px, 7vw, 48px); }
-        .video-expand-icon { stroke-width: 2.2; }
+        .video-play-button {
+            background: #f6edcf;
+            color: #a51d10;
+            font-size: clamp(1rem, 3vw, 1.7rem);
+            text-shadow: none;
+        }
+        .video-expand-button {
+            width: clamp(32px, 7vw, 48px);
+            background: linear-gradient(#b32212, #8e170c);
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+        }
         .video-card:fullscreen {
             position: fixed;
             z-index: 1000;
@@ -513,7 +523,6 @@
         .image-action-button:disabled { cursor: wait; opacity: .72; }
         .image-action-button:focus-visible { outline: 3px solid #800020; outline-offset: 4px; }
         .image-action-button img { display: block; width: clamp(94px, 30vw, 132px); height: auto; }
-        .back-asset-button[hidden] { display: none !important; }
 
         .player-form {
             display: grid;
